@@ -1,7 +1,8 @@
-module Perif(send, ack, clk, rst);
+module Perif(send, data, clk, rst, ack);
 	 input send;
 	 input clk;
 	 input rst;
+  	 input data;
 	 
 	 output reg ack;
 	 
@@ -19,8 +20,18 @@ module Perif(send, ack, clk, rst);
 	 always @ (*)
 	 begin
 		case (S)
-			2'b10:
-				ack = 1;
+          	2'b00:
+            	ack = 0;
+			2'b01:
+              begin
+				ack = 0;
+                $display(data);
+              end
+          	2'b10:
+              begin
+                ack = 1;
+                $display(data);
+              end
 			default:
 				ack = 0;
 		endcase
@@ -35,12 +46,12 @@ module Perif(send, ack, clk, rst);
 				else
 					NS = 2'b00;
 			2'b01:
-				NS = 2'b10;
+              	NS = 2'b10;
 			2'b10:
-				if (send == 1)
-					NS = 2'b10;
+              	if (send == 0)
+					NS = 2'b00;	
 				else
-					NS = 2'b00;
+					NS = 2'b10;
 			default:
 				NS = 2'b00;
 		endcase
